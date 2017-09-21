@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "resourcePrefix": {
+        "type": "string",
+        "metadata": {
+          "description": "prefix for resource creation"
+        }
+      }
+    },
+    "variables": {
+        "dataLakeStoreName": "[concat(parameters('resourcePrefix'), 'adls')]",
+        "dataLakeAnalyticsName": "[concat(parameters('resourcePrefix'), 'adla')]"
+    },
+    "resources": [
+      {
+        "name": "[variables('dataLakeStoreName')]",
+        "type": "Microsoft.DataLakeStore/accounts",
+        "location": "Central US",
+        "apiVersion": "2016-11-01",
+        "dependsOn": [],
+        "tags": {
+          
+        },
+        "properties": {
+        }
+      },
+      {
+        "name": "[variables('dataLakeAnalyticsName')]",
+        "type": "Microsoft.DataLakeAnalytics/accounts",
+        "location": "Central US",
+        "apiVersion": "2016-11-01",
+        "dependsOn": ["[variables('dataLakeStoreName')]"],
+        "tags": {
+          
+        },
+        "properties": {
+          "defaultDataLakeStoreAccount": "[variables('dataLakeStoreName')]",
+          "dataLakeStoreAccounts": [{
+            "name": "[variables('dataLakeStoreName')]"
+          }]
+        }
+      }
+    ],
+    "outputs": {}
+  }
